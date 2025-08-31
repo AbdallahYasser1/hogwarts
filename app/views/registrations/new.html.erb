@@ -1,0 +1,65 @@
+<div class="card-hogwarts">
+  <h1 class="text-center mb-4">Register as a Wizard</h1>
+  <%= form_with model: @wizard, url: registrations_path, html: { class: "needs-validation" } do |f| %>
+    <% if @wizard.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@wizard.errors.count, "error") %> prohibited this wizard from being saved:</h4>
+        <ul>
+          <% @wizard.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :name, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+        <%= f.text_field :name, class: "form-control ", required: true, placeholder: "Your magical name" %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :email, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+        <%= f.email_field :email, class: "form-control ", required: true, placeholder: "wizard@hogwarts.com" %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :password, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+        <%= f.password_field :password, class: "form-control ", required: true, placeholder: "Strong password" %>
+      </div>
+      <small class="form-text text-warning">Must include at least one uppercase letter, one lowercase letter, and one number.</small>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :date_of_birth, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+        <%= f.date_field :date_of_birth, class: "form-control ", required: true %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :bio, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-book"></i></span>
+        <%= f.text_area :bio, class: "form-control rounded", placeholder: "Tell us about your magical journey...", rows: 3 %>
+      </div>
+    </div>
+
+    <div class="form-check mb-3">
+      <%= f.check_box :muggle_relatives, class: "form-check-input" %>
+      <%= f.label :muggle_relatives, "Do you have any muggle relatives?", class: "form-check-label" %>
+    </div>
+
+    <div class="d-grid">
+      <%= f.submit "Register", class: "btn btn-hogwarts btn-lg" %>
+    </div>
+  <% end %>
+</div>
