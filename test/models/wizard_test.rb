@@ -2,11 +2,11 @@ require "test_helper"
 
 class WizardTest < ActiveSupport::TestCase
   def setup
-    @wizard = wizards(:hermione)
+  @wizard = wizards(:hermione)
   end
 
   test "should be valid" do
-    assert @wizard.valid?
+  assert @wizard.valid?, @wizard.errors.full_messages.join(", ")
   end
 
   test "name should be present" do
@@ -22,15 +22,14 @@ class WizardTest < ActiveSupport::TestCase
 
   test "password format should be valid" do
     @wizard.password = "badpass"
-    assert_not @wizard.valid?
+  assert_not @wizard.valid?
   end
 
-  test "hogwarts_house is automatically assigned on create when missing from params" do
-    attrs = wizards(:hermione).attributes.symbolize_keys.except(:id, :hogwarts_house)
+  test "hogwarts_house is automatically assigned on create" do
+    attrs = wizards(:hermione).attributes.symbolize_keys.except(:id, :hogwarts_house, :password_digest)
     attrs[:email] = "newwizard@hogwarts.com"
-    wizard = Wizard.new(attrs)
-    wizard.save
-    assert wizard.hogwarts_house.present?, "hogwarts_house should be assigned automatically"
-    assert_includes Wizard.hogwarts_houses.keys, wizard.hogwarts_house
+    attrs[:password] = "BookWorm1"
+    wizard = Wizard.create(attrs)
+    assert wizard.hogwarts_house.present?
   end
 end

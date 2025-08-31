@@ -16,4 +16,7 @@ Rails.application.routes.draw do
 
   resources :registrations, only: [ :new, :create ]
   resources :wizards, only: [ :show ]
+  get "/login", to: "sessions#new", as: "login"
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy", as: "logout"
 end
