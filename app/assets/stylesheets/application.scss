@@ -1,0 +1,111 @@
+@import "bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Hogwarts custom styles */
+body {
+  background: linear-gradient(135deg, #2c3e50 0%, #8e44ad 100%);
+  color: #fff;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+}
+
+.card-hogwarts {
+  background: rgba(44, 62, 80, 0.95);
+  border-radius: 1rem;
+  box-shadow: 0 0 24px 0 #8e44ad;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 500px;
+}
+
+.btn-hogwarts {
+  background: #8e44ad;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.btn-hogwarts:hover {
+  background: #6c3483;
+}
+
+.form-label {
+  color: #f7ca18;
+  font-weight: bold;
+}
+
+.form-control {
+  background: #fff;
+  color: #2c3e50;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 4px #8e44ad33;
+  border: 1px solid #8e44ad;
+}
+.input-group-text {
+  background: none !important;
+  color: #f7ca18;
+  border: none;
+  box-shadow: none;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+.landing-bg {
+  background: radial-gradient(circle at 60% 40%, #8e44ad 0%, #23272b 80%);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-bg::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(120deg, rgba(44,62,80,0.7) 0%, rgba(142,68,173,0.5) 100%);
+  z-index: 0;
+}
+.landing-bg .container, .landing-bg .row, .landing-bg .col-md-6, .landing-bg .bg-dark {
+  position: relative;
+  z-index: 1;
+}
+.landing-bg h1, .landing-bg p, .landing-bg ul, .landing-bg a {
+  text-shadow: 0 2px 8px #23272b, 0 0 12px #f7ca18;
+}
+.landing-bg h1 {
+  letter-spacing: 2px;
+  font-family: 'Cinzel', serif;
+}
+.landing-bg .btn-hogwarts {
+  box-shadow: 0 0 16px #f7ca18, 0 0 8px #8e44ad;
+  border: 2px solid #f7ca18;
+}
+.landing-bg .bg-dark {
+  border: 2px solid #f7ca18;
+  box-shadow: 0 0 24px #8e44ad;
+}
+
+.magic-bats {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 40px; pointer-events: none;
+  z-index: 10;
+}
+.bat {
+  position: absolute;
+  top: 10px;
+  width: 32px; height: 16px;
+  background: url('bat.png') no-repeat center center;
+  background-size: contain;
+  animation: bat-fly 2.5s infinite linear;
+}
+@keyframes bat-fly {
+  0% { transform: translateY(0) scaleX(1); }
+  50% { transform: translateY(-12px) scaleX(-1); }
+  100% { transform: translateY(0) scaleX(1); }
+}

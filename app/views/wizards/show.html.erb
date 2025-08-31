@@ -1,0 +1,11 @@
+<div class="card-hogwarts">
+  <h1 class="text-center mb-4">🧙‍♂️ Wizard Profile</h1>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item bg-transparent text-light"><strong>Name:</strong> <%= @wizard.name %></li>
+    <li class="list-group-item bg-transparent text-light"><strong>Email:</strong> <%= @wizard.email %></li>
+    <li class="list-group-item bg-transparent text-light"><strong>Date of Birth:</strong> <%= @wizard.date_of_birth %></li>
+    <li class="list-group-item bg-transparent text-light"><strong>Bio:</strong> <%= @wizard.bio.presence || "N/A" %></li>
+    <li class="list-group-item bg-transparent text-light"><strong>Muggle Relatives:</strong> <%= @wizard.muggle_relatives ? "Yes" : "No" %></li>
+    <li class="list-group-item bg-transparent text-light"><strong>Hogwarts House:</strong> <span class="badge bg-warning text-dark"><%= @wizard.hogwarts_house %></span></li>
+  </ul>
+</div>
