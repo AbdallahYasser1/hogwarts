@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20250830) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_31_101144) do
   create_table "wizards", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
-    t.string "password", null: false
+    t.string "password_digest", null: false
     t.date "date_of_birth", null: false
     t.text "bio"
     t.boolean "muggle_relatives", default: false, null: false
@@ -22,6 +22,7 @@ ActiveRecord::Schema[8.0].define(version: 20250830) do
     t.boolean "is_admin", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "remember_digest"
     t.index ["email"], name: "index_wizards_on_email", unique: true
   end
 end
