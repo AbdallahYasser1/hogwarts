@@ -9,7 +9,7 @@ class RegistrationsController < ApplicationController
       flash[:info] = "Registration successful! Check your email for instructions."
       redirect_to landing_path
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

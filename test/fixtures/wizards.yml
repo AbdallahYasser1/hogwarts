@@ -1,0 +1,48 @@
+hermione:
+  name: Hermione Granger
+  email: hermione@hogwarts.com
+  password: BookWorm1
+  date_of_birth: 1979-09-19
+  bio: Brightest witch of her age.
+  muggle_relatives: true
+  hogwarts_house: Gryffindor
+
+harry:
+  name: Harry Potter
+  email: harry@hogwarts.com
+  password: Potter007
+  date_of_birth: 1980-07-31
+  bio: The Boy Who Lived.
+  muggle_relatives: true
+  hogwarts_house: Gryffindor
+
+
+ron:
+  name: Ron Weasley
+  email: ron@hogwarts.com
+  password: weasley
+  date_of_birth: 1980-03-01
+  bio: Loyal friend.
+  muggle_relatives: false
+  hogwarts_house: Gryffindor
+
+luna:
+  name: Luna Lovegood
+  email: luna@hogwarts.com
+  password: Ravenclaw1
+  date_of_birth: 1981-02-13
+  bio: Quirky and kind.
+  muggle_relatives: false
+  hogwarts_house: Gryffindor
+
+
+mcgonagall:
+  name: Minerva McGonagall
+  email: mcgonagall@hogwarts.com
+  password: transfiguration
+  date_of_birth: 1950-10-04
+  bio: Head of Gryffindor House.
+  muggle_relatives: false
+  is_admin: true
+  hogwarts_house: Gryffindor
+
