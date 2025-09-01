@@ -1,7 +1,7 @@
 hermione:
   name: Hermione Granger
   email: hermione@hogwarts.com
-  password_digest: <%= Wizard.digest('BookWorm1') %>
+  encrypted_password: <%= Wizard.digest('BookWorm1') %>
   date_of_birth: 1979-09-19
   bio: Brightest witch of her age.
   muggle_relatives: true
@@ -10,7 +10,7 @@ hermione:
 harry:
   name: Harry Potter
   email: harry@hogwarts.com
-  password_digest: <%= Wizard.digest('Potter007') %>
+  encrypted_password: <%= Wizard.digest('Potter007') %>
   date_of_birth: 1980-07-31
   bio: The Boy Who Lived.
   muggle_relatives: true
@@ -20,7 +20,7 @@ harry:
 ron:
   name: Ron Weasley
   email: ron@hogwarts.com
-  password_digest: <%= Wizard.digest('weasley') %>
+  encrypted_password: <%= Wizard.digest('weasley') %>
   date_of_birth: 1980-03-01
   bio: Loyal friend.
   muggle_relatives: false
@@ -29,7 +29,7 @@ ron:
 luna:
   name: Luna Lovegood
   email: luna@hogwarts.com
-  password_digest: <%= Wizard.digest('Ravenclaw1') %>
+  encrypted_password: <%= Wizard.digest('Ravenclaw1') %>
   date_of_birth: 1981-02-13
   bio: Quirky and kind.
   muggle_relatives: false
@@ -39,7 +39,7 @@ luna:
 mcgonagall:
   name: Minerva McGonagall
   email: mcgonagall@hogwarts.com
-  password_digest: <%= Wizard.digest('transfiguration') %>
+  encrypted_password: <%= Wizard.digest('transfiguration') %>
   date_of_birth: 1950-10-04
   bio: Head of Gryffindor House.
   muggle_relatives: false

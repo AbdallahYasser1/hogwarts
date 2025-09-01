@@ -14,13 +14,6 @@ Rails.application.routes.draw do
 
   get "/" => "pages#landing", as: :landing
 
-  resources :registrations, only: [ :new, :create ]
+  devise_for :wizards
   resources :wizards, only: [ :show ]
-  get "/login", to: "sessions#new", as: "login"
-  post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy", as: "logout"
-  get "/forgot_password", to: "forget_passwords#new", as: "forgot_password"
-  post "/forgot_password", to: "forget_passwords#create"
-  get "/reset_password", to: "forget_passwords#edit", as: "edit_password"
-  patch "/reset_password", to: "forget_passwords#update"
 end

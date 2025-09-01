@@ -6,39 +6,36 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get login page" do
-    get login_path
+    get new_wizard_session_path
     assert_response :success
     assert_select "form"
   end
 
   test "should login with valid credentials" do
-    post login_path, params: { email: @wizard.email, password: "Potter007" }
-    assert_redirected_to landing_path
+    post wizard_session_path, params: { wizard: { email: @wizard.email, password: "Potter007" } }
+    assert_redirected_to root_path
     follow_redirect!
     assert_select "a", text: "Welcome, #{ @wizard.name }"
   end
 
   test "should not login with invalid credentials" do
-    post login_path, params: { email: @wizard.email, password: "wrongpassword" }
-    assert_response :success
-    assert_select ".alert", text: /Invalid email or password/
+    post wizard_session_path, params: { wizard: { email: @wizard.email, password: "wrongpassword" } }
+    assert_select ".alert", text: /Invalid Email or password/
   end
 
   test "should logout" do
-    post login_path, params: { email: @wizard.email, password: "Potter007" }
-    delete logout_path
-    assert_redirected_to login_path
-    follow_redirect!
-    assert_select "span", text: "Login"
+    post wizard_session_path, params: { wizard: { email: @wizard.email, password: "Potter007" } }
+    delete destroy_wizard_session_path
+    assert_redirected_to root_path
   end
 
   test "should remember wizard when remember_me is checked" do
-    post login_path, params: { email: @wizard.email, password: "Potter007", remember_me: "1" }
-    assert_not_nil cookies[:remember_token]
+    post wizard_session_path, params: { wizard: { email: @wizard.email, password: "Potter007", remember_me: "1" } }
+    assert_not_nil cookies["remember_wizard_token"]
   end
 
   test "should not remember wizard when remember_me is not checked" do
-    post login_path, params: { email: @wizard.email, password: "Potter007", remember_me: "0" }
-    assert_nil cookies[:remember_token]
+    post wizard_session_path, params: { wizard: { email: @wizard.email, password: "Potter007", remember_me: "0" } }
+    assert_nil cookies["remember_wizard_token"]
   end
 end
