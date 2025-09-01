@@ -1,6 +1,6 @@
-
-
 class Wizard < ApplicationRecord
+  # Active Storage for avatar
+  has_one_attached :avatar
   # Devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
@@ -10,6 +10,14 @@ class Wizard < ApplicationRecord
   validates :email, uniqueness: true
   validates :bio, length: { maximum: 300, message: "must be 300 characters or less" }, allow_blank: true
   validate :password_complexity
+  validates :avatar, content_type: {
+                      in: %w[image/jpeg image/gif image/png],
+                      message: "must be a valid image format"
+                    },
+                    size: {
+                      less_than: 5.megabytes,
+                      message: "should be less than 5MB"
+                    }
 
   enum :hogwarts_house, {
     gryffindor: "Gryffindor",
