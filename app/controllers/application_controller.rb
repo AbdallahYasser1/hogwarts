@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   # include ErrorHandler
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  include Pundit::Authorization
   allow_browser versions: :modern
   before_action :authenticate_wizard!
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
     home_path
   end
 
+  def pundit_user
+    current_wizard
+  end
   protected
 
   def configure_permitted_parameters

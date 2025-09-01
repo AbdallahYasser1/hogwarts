@@ -5,6 +5,5 @@ class PagesController < ApplicationController
   end
 
   def home
-    # This will be the magical home page for logged-in users
   end
 end
