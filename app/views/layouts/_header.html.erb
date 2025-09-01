@@ -10,10 +10,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-              <% if current_page?(root_path) %>
+              <% if current_page?(root_path) || current_page?(home_path) %>
                 <span class="nav-link active text-white" style="pointer-events:none;">Home</span>
               <% else %>
-                <a class="nav-link" href="/">Home</a>
+                  <a class="nav-link" href="<%= wizard_signed_in? ? home_path : root_path %>">Home</a>
               <% end %>
           </li>
           <% if wizard_signed_in? %>
