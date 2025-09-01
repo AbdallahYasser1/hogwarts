@@ -21,21 +21,21 @@
               <a class="nav-link" href="#">Welcome, <%= current_wizard.name %></a>
             </li>
             <li class="nav-item">
-              <%= button_to "Logout", logout_path, method: :delete, class: "nav-link", form_class: "d-inline" %>
+              <%= button_to "Logout", destroy_wizard_session_path, method: :delete, class: "nav-link", form_class: "d-inline" %>
             </li>
           <% else %>
             <li class="nav-item">
-                <% if current_page?(login_path) %>
+                <% if current_page?(new_wizard_session_path) %>
                   <span class="nav-link active text-white" style="pointer-events:none;">Login</span>
                 <% else %>
-                  <a class="nav-link" href="/login">Login</a>
+                  <%= link_to "Login", new_wizard_session_path, class: "nav-link" %>
                 <% end %>
             </li>
             <li class="nav-item">
-                <% if current_page?(new_registration_path) %>
+                <% if current_page?(new_wizard_registration_path) %>
                   <span class="nav-link active text-white" style="pointer-events:none;">Register</span>
                 <% else %>
-                  <a class="nav-link" href="/registrations/new">Register</a>
+                  <%= link_to "Register", new_wizard_registration_path, class: "nav-link" %>
                 <% end %>
             </li>
           <% end %>

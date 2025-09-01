@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_31_101155) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_01_111226) do
   create_table "wizards", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
-    t.string "password_digest", null: false
+    t.string "encrypted_password", null: false
     t.date "date_of_birth", null: false
     t.text "bio"
     t.boolean "muggle_relatives", default: false, null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_31_101155) do
     t.string "remember_digest"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["email"], name: "index_wizards_on_email", unique: true
     t.index ["reset_password_token"], name: "index_wizards_on_reset_password_token", unique: true
   end

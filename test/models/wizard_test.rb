@@ -26,7 +26,7 @@ class WizardTest < ActiveSupport::TestCase
   end
 
   test "hogwarts_house is automatically assigned on create" do
-    attrs = wizards(:hermione).attributes.symbolize_keys.except(:id, :hogwarts_house, :password_digest)
+    attrs = wizards(:hermione).attributes.symbolize_keys.except(:id, :hogwarts_house, :encrypted_password)
     attrs[:email] = "newwizard@hogwarts.com"
     attrs[:password] = "BookWorm1"
     wizard = Wizard.create(attrs)

@@ -2,14 +2,14 @@ require "test_helper"
 
 class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
-    get new_registration_url
+    get new_wizard_registration_path
     assert_response :success
   end
 
   test "should create wizard and enqueue welcome email via model callback" do
     assert_enqueued_emails 1 do
       assert_difference("Wizard.count", 1) do
-        post registrations_url, params: {
+        post wizard_registration_path, params: {
           wizard: {
             name: "Hogwarts User",
             email: "user@hogwarts.com",
@@ -21,13 +21,13 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
         }
       end
     end
-  wizard = Wizard.last
-  assert_equal "Hogwarts User", wizard.name
-  assert_redirected_to landing_path
+    wizard = Wizard.last
+    assert_equal "Hogwarts User", wizard.name
+    assert_redirected_to root_path
   end
-  test "should not create wizard and redirect to registration page on validation error" do
+  test "should not create wizard and show errors on registration page" do
     assert_no_difference("Wizard.count") do
-      post registrations_url, params: {
+      post wizard_registration_path, params: {
         wizard: {
           name: "",
           email: "invalid",
@@ -38,6 +38,6 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    assert_redirected_to registrations_url, status: :unprocessable_content
+    assert_response :unprocessable_content
   end
 end
