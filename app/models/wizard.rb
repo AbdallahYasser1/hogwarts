@@ -62,6 +62,12 @@ class Wizard < ApplicationRecord
     WizardMailer.welcome_email(self).deliver_later
   end
 
+  def send_reset_password_email
+    reset_password_token = self.class.new_token
+    @wizard.update(reset_password_token: reset_password_token, reset_password_sent_at: Time.current)
+    WizardMailer.reset_password_email(self).deliver_later
+  end
+
   def admin?
     !!self.is_admin
   end
