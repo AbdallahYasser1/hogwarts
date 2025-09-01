@@ -23,7 +23,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
     wizard = Wizard.last
     assert_equal "Hogwarts User", wizard.name
-    assert_redirected_to root_path
+    assert_redirected_to home_path
   end
   test "should not create wizard and show errors on registration page" do
     assert_no_difference("Wizard.count") do
