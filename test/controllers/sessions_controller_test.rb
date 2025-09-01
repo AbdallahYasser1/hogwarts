@@ -13,7 +13,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should login with valid credentials" do
     post wizard_session_path, params: { wizard: { email: @wizard.email, password: "Potter007" } }
-    assert_redirected_to root_path
+    assert_redirected_to home_path
     follow_redirect!
     assert_select "a", text: "Welcome, #{ @wizard.name }"
   end

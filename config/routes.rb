@@ -10,10 +10,11 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "pages#landing"
 
+  root "pages#landing"
   get "/" => "pages#landing", as: :landing
+  get "/home" => "pages#home", as: :home
 
   devise_for :wizards
-  resources :wizards, only: [ :show ]
+  resources :wizards, only: [ :show, :index ]
 end

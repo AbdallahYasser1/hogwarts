@@ -1,0 +1,78 @@
+
+<div class="hogwarts-home-bg py-5" style="background: linear-gradient(135deg, #2c2c54 60%, #8e44ad 100%); min-height: 100vh;">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-8 text-center">
+        <img src="/icon.png" alt="Hogwarts Crest" style="width:80px; animation: float 2s infinite ease-in-out;">
+        <h1 class="display-4 fw-bold text-warning mb-3" style="font-family: 'Cinzel', serif; text-shadow: 0 2px 8px #23272b, 0 0 12px #f7ca18;">Welcome to Hogwarts, <%= current_wizard.name %>!</h1>
+        <blockquote class="blockquote text-light mb-4" style="font-family: 'Caveat', cursive; font-size: 1.5rem;">
+          "Happiness can be found, even in the darkest of times, if one only remembers to turn on the light."<br>
+          <footer class="blockquote-footer text-warning">Albus Dumbledore</footer>
+        </blockquote>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-lg border-0 bg-dark text-light h-100 text-center hogwarts-card">
+          <div class="card-body">
+            <i class="bi bi-people-fill display-3 text-warning mb-2"></i>
+            <h3 class="card-title mb-2">Wizards</h3>
+            <p class="card-text">Meet and discover fellow magical folk at Hogwarts.</p>
+            <%= link_to "View Wizards", wizards_path, class: "btn btn-hogwarts btn-lg" %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-lg border-0 bg-dark text-light h-100 text-center hogwarts-card">
+          <div class="card-body">
+            <i class="bi bi-person-badge-fill display-3 text-warning mb-2"></i>
+            <h3 class="card-title mb-2">My Profile</h3>
+            <p class="card-text">View and update your magical profile and details.</p>
+            <%= link_to "My Profile", wizard_path(current_wizard), class: "btn btn-hogwarts btn-lg" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-8 text-center">
+        <div class="magic-candles">
+          <% 8.times do |i| %>
+            <span class="candle" style="left: <%= 10 + i*10 %>%; animation-delay: <%= i*0.3 %>s;"></span>
+          <% end %>
+        </div>
+        <p class="mt-4 text-light" style="font-size: 1.2rem;">Let the magic begin! Explore, connect, and enjoy your journey at Hogwarts.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hogwarts-home-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  .magic-candles {
+    position: relative;
+    height: 60px;
+    margin-bottom: 20px;
+  }
+  .magic-candles .candle {
+    position: absolute;
+    bottom: 0;
+    width: 12px;
+    height: 40px;
+    background: linear-gradient(to top, #f7ca18 60%, #fff 100%);
+    border-radius: 4px;
+    box-shadow: 0 0 12px #f7ca18, 0 0 24px #fff;
+    animation: float-candle 2.5s infinite ease-in-out;
+  }
+  @keyframes float-candle {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0); }
+  }
+  .hogwarts-card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px #8e44ad;
+  }
+</style>

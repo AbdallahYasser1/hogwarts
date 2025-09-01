@@ -21,6 +21,12 @@
               <a class="nav-link" href="#">Welcome, <%= current_wizard.name %></a>
             </li>
             <li class="nav-item">
+              <%= link_to "Wizards", wizards_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "My Profile", wizard_path(current_wizard), class: "nav-link" %>
+            </li>
+            <li class="nav-item">
               <%= button_to "Logout", destroy_wizard_session_path, method: :delete, class: "nav-link", form_class: "d-inline" %>
             </li>
           <% else %>
