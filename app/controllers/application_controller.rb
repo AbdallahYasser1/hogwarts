@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   # include ErrorHandler
   include Pundit::Authorization
+  include Pagy::Backend
   allow_browser versions: :modern
   before_action :authenticate_wizard!
   before_action :configure_permitted_parameters, if: :devise_controller?
