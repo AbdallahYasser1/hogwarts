@@ -1,9 +1,10 @@
 class WizardsController < ApplicationController
-  before_action :set_wizard, only: [ :show, :edit, :update, :edit_password ]
-
+  before_action :set_wizard, only: [ :show, :edit, :update, :edit_password, :follow, :unfollow, :followers, :following ]
 
   def index
-    @wizards = Wizard.order(:name).page(params[:page]).per(10)
+    @pagy, @wizards = pagy(
+      Wizard.order(:name).includes(:followers, :following, avatar_attachment: :blob)
+    )
   end
 
   def show
@@ -27,8 +28,25 @@ class WizardsController < ApplicationController
       end
     end
   end
+  def follow
+    current_wizard.follow(@wizard)
+    redirect_to wizard_path(@wizard), notice: "You are now following #{@wizard.name}."
+  end
 
+  def unfollow
+    current_wizard.unfollow(@wizard)
+    redirect_to wizard_path(@wizard), notice: "You have unfollowed #{@wizard.name}."
+  end
 
+  def followers
+    @wizard = Wizard.find(params[:id])
+    @pagy, @followers = pagy(@wizard.followers.includes(:avatar_attachment, :avatar_blob))
+  end
+
+  def following
+    @wizard = Wizard.find(params[:id])
+    @pagy, @following = pagy(@wizard.following.includes(:avatar_attachment, :avatar_blob))
+  end
   private
 
   def set_wizard
