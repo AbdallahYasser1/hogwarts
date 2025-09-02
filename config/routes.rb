@@ -19,6 +19,10 @@ Rails.application.routes.draw do
   resources :wizards, only: [ :show, :index, :edit, :update ] do
     member do
       get :edit_password
+      post :follow
+      post :unfollow
+      get :followers
+      get :following
     end
   end
 end
