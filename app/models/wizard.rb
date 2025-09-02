@@ -1,4 +1,5 @@
 class Wizard < ApplicationRecord
+  has_many :spells, dependent: :destroy
   # Active Storage for avatar
   has_one_attached :avatar
   # Relations

@@ -16,6 +16,20 @@
       <div class="col-md-6">
         <div class="card shadow-lg border-0 bg-dark text-light hogwarts-card">
           <div class="card-body">
+            <% if current_wizard != @wizard %>
+              <div class="mb-4 d-flex gap-2 justify-content-center">
+                <% if @wizard.followed_by?(current_wizard) %>
+                  <%= button_to "Unfollow", unfollow_wizard_path(@wizard), method: :post, class: "btn btn-danger px-4 py-2", style: "min-width:120px; min-height:40px; font-size:1.1rem; border-radius:1rem;" %>
+                <% else %>
+                      <% if current_wizard.followed_by?(@wizard) && !@wizard.followed_by?(current_wizard) %>
+                  <%= button_to "Follow Back", follow_wizard_path(@wizard), method: :post, class: "btn btn-warning px-4 py-2", style: "min-width:120px; min-height:40px; font-size:1.1rem; border-radius:1rem;" %>
+                     <% else %>
+                  <%= button_to "Follow", follow_wizard_path(@wizard), method: :post, class: "btn btn-success px-4 py-2", style: "min-width:120px; min-height:40px; font-size:1.1rem; border-radius:1rem;" %>
+                <% end %>
+                <% end %>
+          
+              </div>
+            <% end %>
             <div class="mb-4 d-flex justify-content-center gap-4">
               <%= link_to followers_wizard_path(@wizard), class: "text-decoration-none" do %>
                 <div class="stat-card text-center px-4 py-2" style="cursor:pointer; background:rgba(255,255,255,0.08); border-radius:1rem; box-shadow:0 2px 8px #8e44ad;">
@@ -40,18 +54,23 @@
               <li class="list-group-item bg-transparent text-light"><strong>Bio:</strong> <%= @wizard.bio.presence || "N/A" %></li>
               <li class="list-group-item bg-transparent text-light"><strong>Muggle Relatives:</strong> <%= @wizard.muggle_relatives ? "Yes" : "No" %></li>
             </ul>
-            <% if current_wizard != @wizard %>
-              <div class="mb-3">
-                <% if @wizard.followed_by?(current_wizard) %>
-                  <%= button_to "Unfollow", unfollow_wizard_path(@wizard), method: :post, class: "btn btn-danger btn-lg me-2" %>
-                <% else %>
-                  <%= button_to "Follow", follow_wizard_path(@wizard), method: :post, class: "btn btn-success btn-lg me-2" %>
-                <% end %>
-                <% if current_wizard.followed_by?(@wizard) && !@wizard.followed_by?(current_wizard) %>
-                  <%= button_to "Follow Back", follow_wizard_path(@wizard), method: :post, class: "btn btn-warning btn-lg" %>
+            <div class="mb-4 spells-section" style="border: 2px solid #8e44ad; border-radius: 1rem; background: rgba(255,255,255,0.04);">
+              <div class="d-flex justify-content-between align-items-center mb-2 px-3 pt-3">
+                <strong class="text-warning" style="font-size:1.2rem;">Spells</strong>
+                <% if @wizard.spells.count > 0 %>
+                  <%= link_to "View All Spells", wizard_spells_path(@wizard), class: "btn btn-hogwarts btn-sm px-3 py-1" %>
                 <% end %>
               </div>
-            <% end %>
+              <div class="d-flex flex-wrap gap-2 px-3 pb-3">
+                <% @wizard.spells.limit(6).each do |spell| %>
+                  <span class="badge bg-purple text-light px-3 py-2" style="font-size:1rem; background:#8e44ad; border-radius:1rem;"> <%= spell.name %> </span>
+                <% end %>
+                <% if @wizard.spells.count > 6 %>
+                  <span class="badge bg-secondary px-3 py-2" style="border-radius:1rem;">+<%= @wizard.spells.count - 6 %> more</span>
+                <% end %>
+              </div>
+            </div>
+         
         
             <% if current_wizard == @wizard || current_wizard.is_admin? %>
               <%= link_to "Edit Profile", edit_wizard_path(@wizard), class: "btn btn-hogwarts btn-lg mb-2" %>
