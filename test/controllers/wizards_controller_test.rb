@@ -44,8 +44,8 @@ class WizardsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should forbid update if not authorized" do
+    assert_raise Pundit::NotAuthorizedError do
     patch wizard_url(@admin), params: { wizard: { name: "Fake" } }
-    assert_response :redirect
-    assert_equal "You are not authorized to perform this action.", flash[:alert]
+    end
   end
 end
