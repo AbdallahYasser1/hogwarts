@@ -28,7 +28,9 @@
                 <% if current_wizard.following.include?(wizard) %>
                   <%= button_to "Unfollow", unfollow_wizard_path(wizard), method: :post, class: "btn btn-danger btn-sm w-100", style: "min-width:100px; min-height:38px;" %>
                 <% else %>
-                  <%= button_to "Follow", follow_wizard_path(wizard), method: :post, class: "btn btn-success btn-sm w-100", style: "min-width:100px; min-height:38px;" %>
+                  <% unless wizard == current_wizard %>
+                    <%= button_to "Follow", follow_wizard_path(wizard), method: :post, class: "btn btn-success btn-sm w-100", style: "min-width:100px; min-height:38px;" %>
+                  <% end %>
                 <% end %>
               </div>
             </td>

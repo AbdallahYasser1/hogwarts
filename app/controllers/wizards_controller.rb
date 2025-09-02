@@ -1,5 +1,5 @@
 class WizardsController < ApplicationController
-  before_action :set_wizard, only: [ :show, :edit, :update, :edit_password, :follow, :unfollow, :followers, :following ]
+  before_action :set_wizard
 
   def index
     @pagy, @wizards = pagy(
@@ -39,12 +39,10 @@ class WizardsController < ApplicationController
   end
 
   def followers
-    @wizard = Wizard.find(params[:id])
     @pagy, @followers = pagy(@wizard.followers.includes(avatar_attachment: :blob))
   end
 
   def following
-    @wizard = Wizard.find(params[:id])
     @pagy, @following = pagy(@wizard.following.includes(avatar_attachment: :blob))
   end
   private

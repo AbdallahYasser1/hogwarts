@@ -1,0 +1,34 @@
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card shadow-lg border-0 bg-dark text-light hogwarts-card p-4">
+        <div class="card-body">
+          <h2 class="text-center mb-4 text-warning" style="font-family: 'Cinzel', serif; text-shadow: 0 2px 8px #23272b, 0 0 12px #f7ca18;">✨ <%= @spell.name %> ✨</h2>
+          <div class="mb-4">
+            <span class="badge bg-purple text-light mb-2" style="font-size:1.1rem; background:#8e44ad;">Spell Name</span>
+            <div class="fs-4 fw-bold text-warning mb-3"><%= @spell.name %></div>
+            <span class="badge bg-info text-dark mb-2" style="font-size:1.1rem;">Description</span>
+            <div class="fs-5 text-light mb-3" style="white-space:pre-line;"><%= @spell.description %></div>
+          </div>
+          <div class="d-flex gap-2 justify-content-center mt-3">
+            <% if current_wizard == @wizard || current_wizard.is_admin? %>
+            <%= link_to "Edit", edit_wizard_spell_path(@wizard,@spell), class: "btn btn-warning w-100", style: "min-width:100px; min-height:38px;" %>
+            <%= button_to "Delete", wizard_spell_path(@wizard,@spell), method: :delete, class: "btn btn-danger w-100", style: "min-width:100px; min-height:38px;" %>
+            <% end %>
+            <%= link_to "Back to Spells", wizard_spells_path(@wizard), class: "btn btn-secondary w-100", style: "min-width:100px; min-height:38px;" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .hogwarts-card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px #8e44ad;
+  }
+  .bg-purple {
+    background: #8e44ad !important;
+  }
+</style>

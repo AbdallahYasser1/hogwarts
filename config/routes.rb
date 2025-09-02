@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get "/home" => "pages#home", as: :home
 
   devise_for :wizards
+
   resources :wizards, only: [ :show, :index, :edit, :update ] do
     member do
       get :edit_password
@@ -24,5 +25,6 @@ Rails.application.routes.draw do
       get :followers
       get :following
     end
+    resources :spells
   end
 end
