@@ -40,12 +40,12 @@ class WizardsController < ApplicationController
 
   def followers
     @wizard = Wizard.find(params[:id])
-    @pagy, @followers = pagy(@wizard.followers.includes(:avatar_attachment, :avatar_blob))
+    @pagy, @followers = pagy(@wizard.followers.includes(avatar_attachment: :blob))
   end
 
   def following
     @wizard = Wizard.find(params[:id])
-    @pagy, @following = pagy(@wizard.following.includes(:avatar_attachment, :avatar_blob))
+    @pagy, @following = pagy(@wizard.following.includes(avatar_attachment: :blob))
   end
   private
 
