@@ -1,0 +1,24 @@
+expelliarmus:
+  name: Expelliarmus
+  description: Disarming spell.
+  wizard: hermione
+
+lumos:
+  name: Lumos
+  description: Light spell.
+  wizard: hermione
+
+avada_kedavra:
+  name: Avada Kedavra
+  description: Killing curse.
+  wizard: harry
+
+accio:
+  name: Accio
+  description: Summoning charm.
+  wizard: harry
+
+wingardium_leviosa:
+  name: Wingardium Leviosa
+  description: Levitation charm.
+  wizard: mcgonagall

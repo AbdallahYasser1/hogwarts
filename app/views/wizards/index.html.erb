@@ -1,0 +1,49 @@
+
+<div class="container-fluid mt-5">
+  <div class="card-hogwarts p-4 w-100" style="max-width: 1200px; margin: 0 auto;">
+    <h2 class="text-center mb-4">All Wizards</h2>
+    <table class="table table-striped table-dark w-100">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Date of Birth</th>
+          <th>House</th>
+          <th>Profile</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @wizards.each do |wizard| %>
+          <tr>
+            <td>
+              <% if wizard.avatar.attached? %>
+                <%= image_tag wizard.avatar.variant(resize_to_fill: [48,48]), class: "rounded-circle border border-warning", alt: wizard.name %>
+              <% else %>
+                <%= image_tag "/icon.png", width: 48, height: 48, class: "rounded-circle border border-secondary", alt: wizard.name %>
+              <% end %>
+            </td>
+            <td><%= wizard.name %></td>
+            <td><%= wizard.email %></td>
+            <td><%= wizard.date_of_birth %></td>
+            <td><%= wizard.hogwarts_house %></td>
+            <td><%= link_to "View", wizard_path(wizard), class: "btn btn-hogwarts btn-sm" %></td>
+            <td>
+              <% if wizard != current_wizard %>
+                <% if wizard.respond_to?(:followed_by?) && wizard.followed_by?(current_wizard) %>
+                  <%= button_to "Unfollow",unfollow_wizard_path(wizard), method: :post, class: "btn btn-danger btn-sm me-2" %>
+                <% else %>
+                  <%= button_to "Follow", follow_wizard_path(wizard), method: :post, class: "btn btn-success btn-sm me-2" %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+    </div>
+  </div>
+</div>

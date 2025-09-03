@@ -1,0 +1,57 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 bg-dark text-light hogwarts-card">
+        <div class="card-body">
+          <h2 class="text-center text-warning mb-4" style="font-family: 'Cinzel', serif;">Edit Profile</h2>
+          <%= form_with model: @wizard, url: wizard_path(@wizard), method: :patch, local: true do |f| %>
+            <div class="mb-3">
+              <%= f.label :name, class: "form-label" %>
+              <%= f.text_field :name, class: "form-control", required: true %>
+            </div>
+            <div class="mb-3">
+              <%= f.label :date_of_birth, class: "form-label" %>
+              <%= f.date_field :date_of_birth, class: "form-control", required: true %>
+            </div>
+            <div class="mb-3">
+              <%= f.label :bio, class: "form-label" %>
+              <%= f.text_area :bio, class: "form-control", rows: 3 %>
+            </div>
+            <div class="form-check mb-3">
+              <%= f.check_box :muggle_relatives, class: "form-check-input" %>
+              <%= f.label :muggle_relatives, "Do you have any muggle relatives?", class: "form-check-label" %>
+            </div>
+            <% if current_wizard.is_admin? %>
+              <div class="mb-3">
+                <%= f.label :email, class: "form-label" %>
+                <%= f.email_field :email, class: "form-control", required: true %>
+              </div>
+              <div class="mb-3">
+                <%= f.label :hogwarts_house, class: "form-label" %>
+                <%= f.select :hogwarts_house, Wizard.hogwarts_houses.keys, {}, class: "form-control" %>
+              </div>
+            <% else %>
+              <div class="mb-3">
+                <%= f.label :email, class: "form-label" %>
+                <%= f.email_field :email, class: "form-control", value: @wizard.email, readonly: true %>
+              </div>
+              <div class="mb-3">
+                <%= f.label :hogwarts_house, class: "form-label" %>
+                <%= f.text_field :hogwarts_house, class: "form-control", value: @wizard.hogwarts_house, readonly: true %>
+              </div>
+            <% end %>
+            <div class="d-grid">
+              <%= f.submit "Update Profile", class: "btn btn-hogwarts btn-lg" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .hogwarts-card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px #8e44ad;
+  }
+</style>

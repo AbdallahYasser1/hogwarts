@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <div class="card-hogwarts p-4">
+    <h2 class="text-center mb-4">New Spell</h2>
+    <%= form_with model: @spell, url: wizard_spells_path(@wizard), method: :post,local: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :name, class: "form-label" %>
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+      <div class="mb-3">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-control", rows: 4 %>
+      </div>
+      <%= f.submit "Create Spell", class: "btn btn-success" %>
+      <%= link_to "Back", wizard_spells_path(@wizard), class: "btn btn-secondary ms-2" %>
+    <% end %>
+  </div>
+</div>

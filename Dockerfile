@@ -1,72 +1,53 @@
-# syntax=docker/dockerfile:1
-# check=error=true
+# Stage 1: Get Ruby Base image 
+FROM ruby:3.3.0-slim AS base
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t hogwarts .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name hogwarts hogwarts
 
-# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
-
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.3.0
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
-
-# Rails app lives here
 WORKDIR /rails
 
-# Install base packages
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN apt-get update -qq && \ 
+    apt-get install -y --no-install-recommends \
+    postgresql-client \
+    libjemalloc2 \
+    imagemagick \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set production environment
 ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development:test" \
+    BUNDLE_PATH="/usr/local/bundle"
+    
+# End of Stage 1 
 
-# Throw-away build stage to reduce size of final image
-FROM base AS build
+# Stage 2 BUILDER stage where will be the heavy work then it will be thrown away 
+# we will move the files from this stage to the first stage
+FROM base AS builder
 
-# Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    apt-get install -y --no-install-recommends \
+    libyaml-dev pkg-config libpq-dev\
+    build-essential
 
-# Install application gems
+## Install  Gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+RUN bundle install
 
-# Copy application code
+# Copy Application Code
 COPY . .
-
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
-
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# You want to do this heavy lifting once when you build the Docker image, not every time a user visits your site. By precompiling the assets in the builder stage, you ensure that your final production image already has the optimized files ready to go, leading to a fast and efficient application.
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+# End of builder stage 
 
 
-
-
-# Final stage for app image
 FROM base
 
-# Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
+# Copy installed gems from the build stage
+COPY --from=builder "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
+# Copy the application code and precompiled assets from the build stage
+COPY --from=builder /rails /rails
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Run bundle exec rails db:prepare to set up the database
+# This command will create the database, load the schema, and initialize it with the seed data
 
-# Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+EXPOSE 3000
+
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
