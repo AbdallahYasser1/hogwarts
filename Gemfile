@@ -20,6 +20,8 @@ gem "pagy"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 gem "sqlite3"
+# Message Broker for background jobs, email sending, and more [https://kafka.apache.org]
+gem "karafka", ">= 2.4.0"
 # authentication
 gem "bcrypt"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]

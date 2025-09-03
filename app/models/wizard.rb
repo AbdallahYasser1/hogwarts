@@ -41,8 +41,13 @@ class Wizard < ApplicationRecord
 
 
 def follow(other_wizard)
-  return if self == other_wizard
-  following << other_wizard unless following.include?(other_wizard)
+  return if self == other_wizard || following.include?(other_wizard)
+  following << other_wizard
+  NotificationService.call(
+  action: :follow,
+  action_maker: self,
+  receiver: other_wizard
+)
 end
 
 def unfollow(other_wizard)
