@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
+  get "/health", to: proc { [ 200, {}, [ "OK" ] ] }
 
   root "pages#landing"
   get "/" => "pages#landing", as: :landing
