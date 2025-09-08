@@ -9,6 +9,7 @@ RUN apt-get update -qq && \
     postgresql-client \
     libjemalloc2 \
     imagemagick \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 ENV RAILS_ENV="production" \
@@ -32,7 +33,6 @@ RUN bundle install
 
 # Copy Application Code
 COPY . .
-# You want to do this heavy lifting once when you build the Docker image, not every time a user visits your site. By precompiling the assets in the builder stage, you ensure that your final production image already has the optimized files ready to go, leading to a fast and efficient application.
 RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 # End of builder stage 
 

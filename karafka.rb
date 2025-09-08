@@ -2,8 +2,8 @@
 
 class KarafkaApp < Karafka::App
   setup do |config|
-    config.kafka = { 'bootstrap.servers': '127.0.0.1:9092' }
-    config.client_id = 'YOUR_APP_NAME'
+    config.kafka = { 'bootstrap.servers': 'kafka-broker:29092' }
+    config.client_id = 'my_notification_app'
 
     # IMPORTANT: Customize this group_id with your application name.
     # The group_id should be unique per application to properly track message consumption.
@@ -16,7 +16,9 @@ class KarafkaApp < Karafka::App
     #
     # For more details on consumer groups and routing configuration, please refer to the
     # Karafka documentation: https://karafka.io/docs
-    config.group_id = 'YOUR_APP_NAME_consumer'
+    config.group_id = 'my_notification_app_consumer'
+      config.max_wait_time = 250
+    # Force polling when even 1 byte is available (effectively 1 message)
     # Recreate consumers with each batch. This will allow Rails code reload to work in the
     # development mode. Otherwise Karafka process would not be aware of code changes
     config.consumer_persistence = !Rails.env.development?
@@ -44,7 +46,7 @@ class KarafkaApp < Karafka::App
       Karafka.logger,
       # If you set this to true, logs will contain each message details
       # Please note, that this can be extensive
-      log_messages: false
+      log_messages: true
     )
   )
 
@@ -69,18 +71,21 @@ class KarafkaApp < Karafka::App
   # end
 
   routes.draw do
-    # Uncomment this if you use Karafka with ActiveJob
-    # You need to define the topic per each queue name you use
-    # active_job_topic :default
-    topic :example do
-      # Uncomment this if you want Karafka to manage your topics configuration
-      # Managing topics configuration via routing will allow you to ensure config consistency
-      # across multiple environments
-      #
-      # config(partitions: 2, 'cleanup.policy': 'compact')
-      consumer ExampleConsumer
+        # Uncomment this if you use Karafka with ActiveJob
+        # You need to define the topic per each queue name you use
+        # active_job_topic :default
+        topic :notification_producer_email do
+          consumer NotificationsConsumer
+        end
+
+        topic :notification_producer_sms do
+          consumer NotificationsConsumer
+        end
+
+        topic :notification_producer_push_notification do
+          consumer NotificationsConsumer
+        end
     end
-  end
 end
 
 # Karafka now features a Web UI!
