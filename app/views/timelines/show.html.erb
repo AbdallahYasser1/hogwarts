@@ -1,0 +1,51 @@
+<div class="bg-light min-vh-100">
+  <div class="container py-4 py-lg-5">
+
+    <!-- User Information Card -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body p-4 p-md-5">
+        <!-- We assume the @user object has a name and email. -->
+        <!-- If not, you can adjust ` @user.name ` and ` @user.email ` accordingly. -->
+        <h1 class="card-title h3">
+          <%= @user.name || "User ##{@user.id}" %>
+        </h1>
+        <p class="card-subtitle text-muted">
+          <%= @user.email || "No email provided" %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Timeline Section -->
+    <div>
+      <h2 class="h4 mb-4">User Timeline</h2>
+
+      <!-- Check if the timeline has entries -->
+      <% if @timeline.present? %>
+        <div class="d-grid gap-3">
+          <!-- Loop through each timeline entry -->
+          <% @timeline.each do |entry| %>
+            <div class="card shadow-sm border-start border-primary border-4">
+              <div class="card-body">
+                <p class="card-text fs-5 mb-1">
+                  <%= entry['message'] || "No content for this entry." %>
+                </p>
+                <small class="text-muted">
+                  <!-- Display formatted timestamp from the entry -->
+                  Posted on: <%= entry['created_at'] %>
+                </small>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <!-- Message to show when the timeline is empty -->
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <p class="text-muted mb-0">This user's timeline is empty.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>
