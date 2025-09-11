@@ -35,7 +35,6 @@ gem "pundit"
 gem "active_storage_validations"
 gem "image_processing"
 gem "mini_magick"
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

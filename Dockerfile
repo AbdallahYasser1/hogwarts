@@ -48,6 +48,4 @@ COPY --from=builder /rails /rails
 # Run bundle exec rails db:prepare to set up the database
 # This command will create the database, load the schema, and initialize it with the seed data
  
-EXPOSE 3000
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

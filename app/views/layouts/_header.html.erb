@@ -27,6 +27,9 @@
               <%= link_to "My Profile", wizard_path(current_wizard), class: "nav-link" %>
             </li>
             <li class="nav-item">
+              <%= link_to "Timeline", wizard_timeline_path(current_wizard), class: "nav-link" %>
+            </li>
+            <li class="nav-item">
               <%= button_to "Logout", destroy_wizard_session_path, method: :delete, class: "nav-link", form_class: "d-inline" %>
             </li>
           <% else %>

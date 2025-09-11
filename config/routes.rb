@@ -27,5 +27,6 @@ Rails.application.routes.draw do
       get :following
     end
     resources :spells
+    resource :timeline, only: [ :show ], controller: "timelines"
   end
 end
