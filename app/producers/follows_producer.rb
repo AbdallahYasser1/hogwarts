@@ -1,0 +1,2 @@
+class FollowsProducer < ApplicationProducer
+end

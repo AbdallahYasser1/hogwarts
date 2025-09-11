@@ -1,0 +1,15 @@
+<div class="card-hogwarts">
+  <h1 class="text-center mb-4">Forgot Password</h1>
+  <%= form_with url: forgot_password_path, method: :post, html: { class: "needs-validation" } do |f| %>
+    <div class="mb-3">
+      <%= f.label :email, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+        <%= f.email_field :email, class: "form-control", required: true, placeholder: "wizard@hogwarts.com" %>
+      </div>
+    </div>
+    <div class="d-grid">
+      <%= f.submit "Send Reset Instructions", class: "btn btn-hogwarts btn-lg" %>
+    </div>
+  <% end %>
+</div>

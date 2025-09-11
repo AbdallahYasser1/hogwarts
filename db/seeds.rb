@@ -1,9 +1,19 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Admin Wizard
+Wizard.find_or_create_by!(email: "dumbledore@great.com") do |wizard|
+  wizard.name = "Albus Dumbledore"
+  wizard.password = "avada kedavra"
+  wizard.date_of_birth = Date.new(2000, 1, 1)
+  wizard.bio = "The greatest wizard of all time."
+  wizard.muggle_relatives = true
+  wizard.is_admin = true
+end
+
+# Regular Wizard
+Wizard.find_or_create_by!(email: "harry@hogwarts.com") do |wizard|
+  wizard.name = "Harry Potter"
+  wizard.password = "Potter007"
+  wizard.date_of_birth = Date.new(2000, 7, 31)
+  wizard.bio = "The Boy Who Lived. Courageous and determined."
+  wizard.muggle_relatives = true
+  wizard.is_admin = false
+end

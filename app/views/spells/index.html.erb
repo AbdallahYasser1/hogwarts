@@ -1,0 +1,46 @@
+<div class="container mt-4">
+  <div class="card-hogwarts p-4">
+    <h2 class="text-center mb-4">
+      <% if @wizard == current_wizard %>
+        My Spells
+      <% else %>
+        <%= @wizard.name %>'s Spells
+      <% end %>
+    </h2>
+    <div class="d-flex justify-content-between mb-3">
+  <%= link_to "Back to Profile", wizard_path(@wizard), class: "btn btn-secondary" %>
+      <% if current_wizard == @wizard || current_wizard.is_admin? %>
+        <%= link_to "New Spell", new_wizard_spell_path(@wizard), class: "btn btn-success" %>
+      <% end %>
+    </div>
+  <table class="table table-striped table-dark w-100">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @spells.each do |spell| %>
+          <tr>
+            <td><%= spell.name %></td>
+            <td><%= spell.description %></td>
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <%= link_to "Show", wizard_spell_path(@wizard,spell), class: "btn btn-hogwarts btn-sm w-100", style: "min-width:90px; min-height:38px;" %>
+                <% if current_wizard == @wizard || current_wizard.is_admin? %>
+                  <%= link_to "Edit", edit_wizard_spell_path(@wizard,spell), class: "btn btn-warning btn-sm w-100", style: "min-width:90px; min-height:38px;" %>
+                  <%= button_to "Delete", wizard_spell_path(@wizard,spell), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm w-100", style: "min-width:90px; min-height:38px;" %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center mt-3">
+      <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+    </div>
+  </div>
+</div>

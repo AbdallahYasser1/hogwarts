@@ -1,0 +1,2 @@
+class UnfollowProducer < ApplicationProducer
+end

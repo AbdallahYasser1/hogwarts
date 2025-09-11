@@ -1,0 +1,168 @@
+services:
+  # The Rails Application Service
+  app:
+    build: .
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/rails
+      - rails_storage:/rails/storage 
+      - bundle_cache:/usr/local/bundle
+    ports:
+      - "8080:3000"
+    environment:
+      RAILS_ENV: production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      DATABASE_URL: "postgresql://postgres:password@db:5432/myapp_production"
+      REDIS_URL: "redis://redis:6379/0"
+      KAFKA_BROKERS: "kafka-broker:29092"
+      TIMELINE_SERVICE_URL: "http://timeline:3001"
+      RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_LOG_TO_STDOUT: "true"
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: myapp_production
+  
+  db:
+    image: postgres:16-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d myapp_production"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: myapp_production
+    restart: always
+  
+  kafka-broker:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka-broker:29092,EXTERNAL://0.0.0.0:9092,CONTROLLER://kafka-broker:9093'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka-broker:29092,EXTERNAL://localhost:9092'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-broker:9093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      CLUSTER_ID: 'Po74xWDvTmS5WhhYX_cwkA'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "cub kafka-ready -b localhost:9092 1 30"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  kafka-topic-creator:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      kafka-broker:
+        condition: service_healthy
+    command: >
+      bash -c "
+        echo 'Waiting for Kafka to be ready...' &&
+        cub kafka-ready -b kafka-broker:29092 1 60 &&
+        echo 'Kafka is ready! Creating topics...' &&
+        
+        kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic notification_producer_sms --partitions 5 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic notification_producer_email --partitions 5 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic notification_producer_push_notification --partitions 5 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic follows --partitions 5 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic spells --partitions 5 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic unfollow --partitions 5 --replication-factor 1 &&
+
+        echo 'Topics created successfully.'
+      "
+
+  karafka_consumer:
+    build: .
+    command: ["bundle", "exec", "karafka" ,"server"]
+    # We tell Docker to run our script first
+    # entrypoint: ["./entrypoint.sh"]
+    depends_on:
+      kafka-topic-creator:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    restart: on-failure
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'karafka server' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      RUBY_STDOUT_SYNC: "1"
+      RAILS_ENV: production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      DATABASE_URL: "postgresql://postgres:password@db:5432/myapp_production"
+      REDIS_URL: "redis://redis:6379/0"
+      KAFKA_BROKERS: "kafka-broker:29092"
+      RAILS_SERVE_STATIC_FILES: "true"
+      KARAFKA_LOGGER_LEVEL: "debug"
+      RAILS_LOG_TO_STDOUT: "true"
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: myapp_production
+      KARAFKA_ENV: production
+
+  timeline:
+    build:
+      context: ../timeline-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      REDIS_URL: "redis://redis:6379/0"
+      KAFKA_BROKERS: "kafka-broker:29092"
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY_TIMELINE}
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./timeline_service:/app
+  redis:
+    image: redis:8-alpine 
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+  python_consumer:
+    build: ./python_consumer
+    command: ["python", "-u", "consumer.py"]
+    depends_on:
+      kafka-topic-creator:
+        condition: service_completed_successfully
+    environment:
+      KAFKA_BROKERS: "kafka-broker:29092" 
+    restart: on-failure
+
+volumes:
+  postgres_data:
+  rails_storage:
+  kafka_data:
+  bundle_cache:
+  redis_data:
+  timeline_data:

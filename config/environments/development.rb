@@ -25,6 +25,17 @@ Rails.application.configure do
     config.action_controller.perform_caching = false
   end
 
+  config.action_mailer.smtp_settings = {
+    user_name:      Rails.application.credentials.dig(:gmail, :user_name),
+    password:       Rails.application.credentials.dig(:gmail, :password),
+    domain:         Rails.application.credentials.dig(:gmail, :domain),
+    address:        Rails.application.credentials.dig(:gmail, :address),
+    port:           587,
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+
+
   # Change to :null_store to avoid any caching.
   config.cache_store = :memory_store
 
